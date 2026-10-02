@@ -140,14 +140,6 @@ npm run dev
 
 ---
 
-## 🔒 Security & Privacy Notice
-* Sensitive keys and credentials (`.env*`, database connection strings, client secrets) are strictly excluded from version control via `.gitignore`.
-* Always keep your secret keys stored safely in `.env.local` or your deployment platform's secret manager.
-
----
-
-## 🤝 Contributing
-Contributions, suggestions, and issue reports are welcome! Feel free to open an issue or submit a pull request.
 
 ---
 

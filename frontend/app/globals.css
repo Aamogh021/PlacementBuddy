@@ -1,0 +1,241 @@
+@import "tailwindcss";
+
+/* ── Stitch Synthetic Vanguard Design System ──────────────── */
+:root {
+  /* Surface tiers */
+  --background: #0f131c;
+  --surface: #0f131c;
+  --surface-dim: #0f131c;
+  --surface-bright: #353943;
+  --surface-container-lowest: #0a0e17;
+  --surface-container-low: #181b25;
+  --surface-container: #1c1f29;
+  --surface-container-high: #262a34;
+  --surface-container-highest: #31353f;
+
+  /* On-surface */
+  --on-surface: #dfe2ef;
+  --on-surface-variant: #c7c4d7;
+  --on-background: #dfe2ef;
+  --inverse-surface: #dfe2ef;
+  --inverse-on-surface: #2c303a;
+
+  /* Primary */
+  --primary: #c0c1ff;
+  --on-primary: #1000a9;
+  --primary-container: #8083ff;
+  --on-primary-container: #0d0096;
+  --inverse-primary: #494bd6;
+  --primary-fixed: #e1e0ff;
+  --primary-fixed-dim: #c0c1ff;
+  --on-primary-fixed: #07006c;
+  --on-primary-fixed-variant: #2f2ebe;
+
+  /* Secondary */
+  --secondary: #4cd7f6;
+  --on-secondary: #003640;
+  --secondary-container: #03b5d3;
+  --on-secondary-container: #00424e;
+  --secondary-fixed: #acedff;
+  --secondary-fixed-dim: #4cd7f6;
+  --on-secondary-fixed: #001f26;
+  --on-secondary-fixed-variant: #004e5c;
+
+  /* Tertiary */
+  --tertiary: #4edea3;
+  --on-tertiary: #003824;
+  --tertiary-container: #00885d;
+  --on-tertiary-container: #000703;
+  --tertiary-fixed: #6ffbbe;
+  --tertiary-fixed-dim: #4edea3;
+  --on-tertiary-fixed: #002113;
+  --on-tertiary-fixed-variant: #005236;
+
+  /* Error */
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+  --on-error-container: #ffdad6;
+
+  /* Outline */
+  --outline: #908fa0;
+  --outline-variant: #464554;
+
+  /* Surface tint */
+  --surface-tint: #c0c1ff;
+  --surface-variant: #31353f;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--on-surface);
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-headline: var(--font-plus-jakarta-sans);
+}
+
+/* ── Base Reset ────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--background);
+  color: var(--on-surface);
+  font-family: var(--font-sans), system-ui, -apple-system, sans-serif;
+  min-height: 100vh;
+}
+
+/* ── Custom Scrollbar (dark theme) ─────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--surface-container-highest);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--outline-variant);
+}
+
+/* Hide scrollbar on horizontal scroll containers */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ── Selection color ───────────────────────────────── */
+::selection {
+  background-color: rgba(128, 131, 255, 0.35);
+  color: #e1e0ff;
+}
+
+/* ── Focus ring utility ────────────────────────────── */
+:focus-visible {
+  outline: 2px solid rgba(192, 193, 255, 0.5);
+  outline-offset: 2px;
+}
+
+/* ── Material Symbols (Google Icons) ───────────────── */
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  vertical-align: middle;
+}
+
+/* ── Keyframe Animations ───────────────────────────── */
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(128, 131, 255, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 32px rgba(128, 131, 255, 0.35);
+  }
+}
+
+@keyframes cyan-glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 15px rgba(76, 215, 246, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(76, 215, 246, 0.3);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ── Utility Animation Classes ─────────────────────── */
+.animate-glow-pulse {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-cyan-pulse {
+  animation: cyan-glow-pulse 3s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    rgba(128, 131, 255, 0.08) 50%,
+    transparent 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 0.4s ease-out both;
+}
+
+/* ── Smooth page transitions ───────────────────────── */
+main {
+  animation: fade-in-up 0.35s ease-out;
+}

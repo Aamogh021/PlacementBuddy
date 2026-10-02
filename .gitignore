@@ -1,0 +1,70 @@
+# Dependencies
+node_modules/
+*/node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Testing
+coverage/
+
+# Next.js & Build outputs
+.next/
+*/.next/
+out/
+build/
+dist/
+
+# Python backend
+.venv/
+*/.venv/
+venv/
+*/venv/
+env/
+*/env/
+__pycache__/
+*/__pycache__/
+*/**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Sensitive environment variables & secrets (CRITICAL: Never commit credentials)
+.env
+.env*
+*.env
+*.env.local
+*.env.production
+*.env.development
+*.env.test
+!*.env.example
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+*.pem
+
+# Agent, MCP & Scratch files
+.agents/
+.neon
+.neon/
+.playwright-mcp/
+mcp.json
+skills-lock.json
+CLAUDE.md
+AGENTS.md
+review.md
+scratchpad*.md
+
+# Next.js / TypeScript build cache
+*.tsbuildinfo
+next-env.d.ts

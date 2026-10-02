@@ -10,7 +10,9 @@
 | :--- | :--- | :--- | :--- |
 | **Framework** | **Next.js** | `v16.3.1` (App Router) | Core full-stack web framework. Leverages Client Components (`"use client"`), Server Components, and Next.js Serverless API Routes (`/api/...`). |
 | **Backend Engine** | **FastAPI (Python 3.13)** | `v0.115+` | High-throughput backend for ATS binary document parsing (PDF, DOCX, DOC), non-blocking code execution runner, and AI interview evaluation. |
-| **Database & Cloud Storage** | **Supabase (PostgreSQL)** | `v2.31+` | Scalable cloud database for resume analysis history, OA submissions, and interview session logs. |
+| **Database** | **Neon PostgreSQL** | `Serverless` | High-performance serverless cloud Postgres with autoscaling and connection pooling for resume records, OA code submissions, and interview evaluations. |
+| **Backend Hosting** | **Render** | `Python Web Service` | Production containerized Python/FastAPI environment binding to `0.0.0.0:$PORT` with Uvicorn. |
+| **Frontend Hosting** | **Vercel** | `Next.js Edge / Serverless` | Global edge CDN hosting Next.js frontend, proxying API requests to Render backend securely. |
 | **Language** | **TypeScript & Python** | `TS 5.x / Py 3.13` | Static type safety on frontend & high-performance text/code computation on backend. |
 | **UI Rendering** | **React** | `v19.2.8` | Component-driven declarative UI. Manages complex client states (`useState`, `useEffect`, `useRef`, `useContext`). |
 | **Document Parsers** | **pypdf & python-docx** | Latest | Binary extraction of text, tables, and sections from uploaded candidate resumes without data loss. |
@@ -221,4 +223,32 @@ npm run build
 # 4. Start Production Server
 npm start
 ```
+
+---
+
+## 🌐 7. Production Deployment Architecture
+
+```text
+┌────────────────────────┐         ┌────────────────────────┐         ┌────────────────────────┐
+│     Vercel Edge        │  HTTPS  │     Render Web Svc     │ TCP/SSL │    Neon PostgreSQL     │
+│  Next.js 16 (React 19) ├────────►│     FastAPI (Python)   ├────────►│   Serverless Cluster   │
+│  app.vercel.app        │         │  backend.onrender.com  │         │  ep-*.neon.tech/neondb │
+└────────────────────────┘         └────────────────────────┘         └────────────────────────┘
+```
+
+### Production Environment Variables Summary
+
+| Target Host | Variable Name | Purpose | Example Value |
+| :--- | :--- | :--- | :--- |
+| **Vercel** | `FASTAPI_URL` | Backend URL for Next.js BFF proxy routes | `https://placementbuddy-backend.onrender.com` |
+| **Vercel** | `NEXT_PUBLIC_API_URL` | Client-accessible backend URL | `https://placementbuddy-backend.onrender.com` |
+| **Vercel** | `NEXTAUTH_SECRET` | Cryptographic secret for session cookies | `openssl rand -base64 32` |
+| **Vercel** | `NEXTAUTH_URL` | Canonical frontend origin | `https://placementbuddy.vercel.app` |
+| **Vercel** | `GOOGLE_CLIENT_ID` | OAuth Client ID from Google Cloud Console | `*.apps.googleusercontent.com` |
+| **Vercel** | `GOOGLE_CLIENT_SECRET` | OAuth Client Secret | Standard Google OAuth secret |
+| **Render** | `DATABASE_URL` | Neon PostgreSQL pooled connection string | `postgresql://user:pass@ep-pooler.neon.tech/neondb?sslmode=require` |
+| **Render** | `ALLOWED_ORIGINS` | Comma-separated permitted frontend domains | `https://placementbuddy.vercel.app` |
+| **Render** | `PORT` | Auto-assigned web service port | Provided by Render (`10000` / `$PORT`) |
+| **Render** | `GEMINI_API_KEY` | Optional Gemini API key for advanced AI | Google AI Studio API key |
+
 

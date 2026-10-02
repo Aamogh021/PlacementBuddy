@@ -471,7 +471,7 @@ export default function OARoundsPage() {
     } catch (e: any) {
       setExecResults({
         status: "error",
-        error: "Execution server unreachable. Please verify backend is running on port 8000.",
+        error: "Execution server unreachable. Please verify backend service is running and accessible.",
       });
     } finally {
       setExecuting(false);

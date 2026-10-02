@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const FASTAPI_URL = process.env.FASTAPI_URL || "http://127.0.0.1:8000";
+const FASTAPI_URL = (process.env.FASTAPI_URL || process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000").replace(/\/+$/, "");
 
 export async function POST(req: NextRequest) {
   const contentType = req.headers.get("content-type") || "";
@@ -57,8 +57,8 @@ export async function POST(req: NextRequest) {
       console.error("[resume/analyze] FastAPI backend unreachable:", networkErr?.message);
       return NextResponse.json(
         {
-          error: "Resume analysis backend is offline. Please ensure the Python backend is running on port 8000.",
-          detail: "Could not connect to http://127.0.0.1:8000",
+          error: "Resume analysis backend is offline. Please ensure the Python backend is running.",
+          detail: `Could not connect to ${FASTAPI_URL}`,
         },
         { status: 503 }
       );

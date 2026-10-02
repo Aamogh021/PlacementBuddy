@@ -5,7 +5,9 @@
 
 import { CodeExecutionResult, InterviewEvaluationResult, ResumeAnalysisResult } from "./types";
 
-export const API_BASE = "";
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL
+  ? process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "")
+  : "";
 
 /**
  * Upload and analyze resume (.pdf, .docx, .doc, or text)

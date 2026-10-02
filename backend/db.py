@@ -23,10 +23,13 @@ IN_MEMORY_DB: Dict[str, List[Dict[str, Any]]] = {
     "oa_questions": []
 }
 
+import urllib.parse
+
 def get_clean_database_url() -> Optional[str]:
-    if not DATABASE_URL or "your_neon" in DATABASE_URL or "placeholder" in DATABASE_URL:
+    db_url = os.getenv("DATABASE_URL") or os.getenv("NEON_DATABASE_URL") or os.getenv("POSTGRES_URL")
+    if not db_url or "your_neon" in db_url or "placeholder" in db_url:
         return None
-    url = DATABASE_URL
+    url = db_url.strip()
     if url.startswith("postgres://"):
         url = url.replace("postgres://", "postgresql://", 1)
     return url
@@ -39,12 +42,21 @@ async def init_db():
         return
 
     try:
+        clean_dsn = clean_url
+        is_ssl = "neon.tech" in clean_url or "sslmode=require" in clean_url
+        if "?" in clean_url:
+            parsed = urllib.parse.urlsplit(clean_url)
+            query_dict = urllib.parse.parse_qs(parsed.query)
+            query_dict.pop("sslmode", None)
+            clean_query = urllib.parse.urlencode(query_dict, doseq=True)
+            clean_dsn = urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, clean_query, parsed.fragment))
+
         _pool = await asyncpg.create_pool(
-            dsn=clean_url,
+            dsn=clean_dsn,
             min_size=1,
             max_size=10,
             command_timeout=60,
-            ssl="require" if "sslmode=require" in clean_url or "neon.tech" in clean_url else None
+            ssl="require" if is_ssl else None
         )
         logger.info("Connected to Neon PostgreSQL database pool.")
 

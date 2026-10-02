@@ -203,7 +203,7 @@ export default function ResumeHelperPage() {
       const msg = err instanceof Error ? err.message : "Unknown network error";
       if (msg.toLowerCase().includes("fetch") || msg.toLowerCase().includes("network")) {
         setBackendOffline(true);
-        setError("Cannot connect to analysis server. Please ensure the backend is running on port 8000.");
+        setError("Cannot connect to resume analysis service. Please ensure the backend server is running and accessible.");
       } else {
         setError(`Analysis error: ${msg}`);
       }
@@ -550,7 +550,7 @@ export default function ResumeHelperPage() {
                       <p>{error}</p>
                       {backendOffline && (
                         <p className="mt-1 text-[10px] text-amber-400/80">
-                          Please start the backend server on port 8000 using: <code className="bg-amber-950/60 px-1 rounded">npm run dev:backend</code>.
+                          Please ensure the backend service is running and accessible.
                         </p>
                       )}
                     </div>

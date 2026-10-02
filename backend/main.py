@@ -31,15 +31,27 @@ app = FastAPI(
 )
 
 # Enable CORS for Next.js frontend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+# ALLOWED_ORIGINS env var: comma-separated list of allowed origins
+_raw_origins = os.getenv("ALLOWED_ORIGINS", "")
+if _raw_origins:
+    if _raw_origins.strip() == "*":
+        CORS_ORIGINS = ["*"]
+    else:
+        CORS_ORIGINS = [o.strip() for o in _raw_origins.split(",") if o.strip()]
+else:
+    CORS_ORIGINS = [
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "http://192.168.29.122:3000",
-        "*"
-    ],
-    allow_credentials=True,
+    ]
+
+# If wildcard is used, allow_credentials must be False per CORS spec, otherwise True
+allow_creds = CORS_ORIGINS != ["*"]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"^https://.*\.vercel\.app$" if CORS_ORIGINS != ["*"] else None,
+    allow_credentials=allow_creds,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -58,6 +70,8 @@ def root():
         "database_connected": is_database_connected(),
         "version": "2.1.0",
         "endpoints": [
+            "/health",
+            "/api/health",
             "/api/resume/analyze",
             "/api/oa/questions",
             "/api/oa/companies",
@@ -69,6 +83,7 @@ def root():
         ]
     }
 
+@app.get("/health")
 @app.get("/api/health")
 def health_check():
     return {
@@ -79,4 +94,5 @@ def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+    port = int(os.getenv("PORT", "8000"))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)
